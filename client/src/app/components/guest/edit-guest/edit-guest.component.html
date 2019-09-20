@@ -1,0 +1,55 @@
+<h1 class="page-header">Edit Guest</h1>
+
+<!-- Custom Success/Erro Message -->
+<div class="row show-hide-message" *ngIf="message">
+  <div [ngClass]="messageClass">
+    {{ message }}
+  </div>
+</div>
+
+<!-- Edit Guest Form -->
+<form [formGroup]="form" (submit)="onGuestSubmitUpdate()" *ngIf="!loading">
+
+  <div class="form-group">
+    <label for="name">*Name</label>
+    <div [ngClass]="{'has-success': form.controls.name.valid, 'has-error': form.controls.name.dirty && form.controls.name.errors}">
+      <input type="text" rows="8" cols="80" name="name" class="form-control" placeholder="Name"   [(ngModel)]="guest.name" formControlName="name" />
+      <ul class="help-block">
+        <li *ngIf="form.controls.name.dirty && form.controls.name.errors?.required">This field is required.</li>
+        <li *ngIf="(form.controls.name.dirty && form.controls.name.errors?.minlength) || (form.controls.name.dirty && form.controls.name.errors?.maxlength)">Max length: 15, Min length: 5</li>
+        <li *ngIf="form.controls.name.dirty && form.controls.name.errors?.validateName">Must be a letter or number</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <label for="email">*Email</label>
+    <div [ngClass]="{'has-success': form.controls.email.valid, 'has-error': form.controls.email.dirty && form.controls.email.errors}">
+      <input name="email" rows="8" cols="80" placeholder="Email" class="form-control" [(ngModel)]="guest.email"  formControlName="email"/>
+      <ul class="help-block">
+        <li *ngIf="form.controls.email.errors?.required && form.controls.email.dirty">This field is required</li>
+        <li *ngIf="form.controls.email.errors?.validateEmail && form.controls.email.dirty">This must be a valid e-mail</li>
+        <li *ngIf="emailMessage">{{ emailMessage}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="phone">*Phone</label>
+    <div [ngClass]="{'has-success': form.controls.phone.valid, 'has-error': form.controls.phone.dirty && form.controls.phone.errors}">
+      <input name="phone" rows="8" cols="80" placeholder="Phone" class="form-control" [(ngModel)]="guest.phone"  formControlName="phone"/>
+      <ul class="help-block">
+        <li *ngIf="form.controls.phone.dirty && form.controls.phone.errors?.required">This field is required.</li>
+        <li *ngIf="(form.controls.phone.dirty && form.controls.phone.errors?.minlength) || (form.controls.phone.dirty && form.controls.phone.errors?.maxlength)">Phone no must be of 10 digit</li>
+        <li *ngIf="form.controls.phone.errors?.validatePhone && form.controls.phone.dirty">Phone number must be digit</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Go Back Button -->
+  <button [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="goBack()">Go Back</button>
+  <!-- Save Changes Button -->
+  <button [disabled]="processing || !form.valid" type="submit" name="save" class="btn btn-info">Save Changes</button>
+
+</form>

@@ -1,0 +1,11 @@
+<div class="jumbotron text-center">
+  <h1> Atithi Application </h1>
+  <div>
+    <a *ngIf="!authService.loggedIn()" routerLink="/register" class="btn btn-primary">Register</a>
+    <a *ngIf="!authService.loggedIn()" routerLink="/login" class="btn btn-default">Login</a>
+    <a *ngIf="authService.loggedIn()" routerLink="/guest" class="btn btn-success">View Guests</a>
+  </div>
+</div>
+
+
+

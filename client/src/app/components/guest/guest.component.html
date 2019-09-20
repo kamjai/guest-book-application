@@ -1,0 +1,93 @@
+<h1 class="page-header">Guest</h1>
+
+<!-- Custom Success/Error Message -->
+<div class="row show-hide-message" *ngIf="message && newPost">
+  <div [ngClass]="messageClass">
+    {{ message }}
+  </div>
+</div>
+
+<button type="button" name="button" class="btn btn-warning" *ngIf="!newPost" (click)="newGuestForm()">New Guest</button>
+
+<br />
+<br />
+
+<!-- New Guest Form -->
+<form [formGroup]="form" name="guestForm" (submit)="onGuestSubmit()" *ngIf="newPost">
+  <!-- Title Input -->
+  <div class="form-group">
+    <label for="name"> *Name </label>
+    <div [ngClass]="{'has-success': form.controls.name.valid, 'has-error': form.controls.name.dirty && form.controls.name.errors}">
+      <input type="text" name="name" class="form-control" placeholder="Name" autocomplete="off" formControlName="name" />
+      <ul class="help-block">
+        <li *ngIf="form.controls.name.dirty && form.controls.name.errors?.required">This field is required.</li>
+        <li *ngIf="(form.controls.name.dirty && form.controls.name.errors?.minlength) || (form.controls.name.dirty && form.controls.name.errors?.maxlength)">Name should be between 5 to 15 character</li>
+        <li *ngIf="form.controls.name.dirty && form.controls.name.errors?.validateName">Must be a letter or number</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Body Input -->
+  <div class="form-group">
+    <label for="email">  *Email </label>
+    <div [ngClass]="{'has-success': form.controls.email.valid, 'has-error': form.controls.email.dirty && form.controls.email.errors}">
+      <input name="email" rows="8" cols="80" placeholder="Email" class="form-control" formControlName="email"/>
+      <ul class="help-block">
+        <li *ngIf="form.controls.email.errors?.required && form.controls.email.dirty">This field is required</li>
+        <li *ngIf="form.controls.email.errors?.validateEmail && form.controls.email.dirty">This must be a valid e-mail</li>
+        <li *ngIf="emailMessage">{{ emailMessage}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="phone"> *Phone </label>
+        <div [ngClass]="{'has-success': form.controls.phone.valid, 'has-error': form.controls.phone.dirty && form.controls.phone.errors}">
+    <input name="phone" rows="8" cols="80" placeholder="Phone" class="form-control" formControlName="phone"/>
+    <ul class="help-block">
+      <li *ngIf="form.controls.phone.dirty && form.controls.phone.errors?.required">This field is required.</li>
+      <li *ngIf="(form.controls.phone.dirty && form.controls.phone.errors?.minlength) || (form.controls.phone.dirty && form.controls.phone.errors?.maxlength)">Phone no must be of 10 digit</li>
+      <li *ngIf="form.controls.phone.errors?.validatePhone && form.controls.phone.dirty">Phone number must be digit</li>
+    </ul>
+  </div>
+  </div>
+
+  <!-- Go Back Button -->
+  <button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go Back</button>
+  <!-- Submit Button -->
+  <button [disabled]="processing || !form.valid" type="submit" name="button" class="btn btn-success">Submit</button>
+
+</form>
+
+
+<!-- Panel Start -->
+<div *ngIf="!newPost">
+  <!-- Panel Outer Layer -->
+  <div class="panel panel-primary" *ngFor="let guest of guestPosts">
+
+    <!-- Panel Title -->
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ guest.name }}</h3>
+    </div>
+
+    <!-- Panel Body -->
+    <div class="panel-body">
+      Email: {{ guest.email }}<br/>
+      Phone: {{ guest.phone }}<br/>
+      In-Time: {{ guest.in_time | date:'MMM dd, yyyy hh:mm:ss' }}<br/>
+      Out-Time: {{guest.out_time | date:'MMM dd, yyyy hh:mm:ss' }}
+
+    </div>
+
+    <!-- Panel Footer Start -->
+    <div class="panel-footer">
+      <!-- Edit Button-->
+      <a [routerLink]="['/edit-guest/', guest._id]" ><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
+      <!-- Delete Button -->
+      <a [routerLink]="['/delete-guest/', guest._id]" ><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
+
+      <button (click) ="updateGuestTimeSubmit(guest._id)" type="submit" name="save" class="btn btn-sm btn-info">Out Time</button>
+
+    </div>
+  </div>
+</div>
